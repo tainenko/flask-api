@@ -22,3 +22,18 @@ def add():
     db.session.add(task)
     db.session.commit()
     return {"result": {"name": task.name, "status": task.status, "id": task.id}}, HTTPStatus.CREATED
+
+
+@task_api.route('/task/<id>', methods=["PUT"])
+def edit(id):
+    data = request.get_json()
+    new_name = data.get("name", None)
+    new_status = data.get("status", None)
+    task = Task.query.filter_by(id=id).first()
+    if new_name:
+        task.name = new_name
+    if new_status:
+        task.status = new_status
+    if new_name or new_status:
+        db.session.commit()
+    return {"result": {"name": task.name, "status": task.status, "id": task.id}}
