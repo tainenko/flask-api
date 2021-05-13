@@ -1,4 +1,4 @@
-from api.model import db
+from database import db
 
 
 class Task(db.Model):

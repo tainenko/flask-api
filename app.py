@@ -1,10 +1,12 @@
 from flask import Flask
-from api.model import db
+from database import db
 from api.router import home_api, task_api
+from config import config_map
 
 
-def init_app():
+def init_app(env=None):
     app = Flask(__name__)
+    app.config.from_object(config_map[env or "test"])
     app.app_context().push()
     app.register_blueprint(home_api)
     app.register_blueprint(task_api)
