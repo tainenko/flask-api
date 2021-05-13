@@ -37,3 +37,10 @@ def edit(id):
     if new_name or new_status:
         db.session.commit()
     return {"result": {"name": task.name, "status": task.status, "id": task.id}}
+
+
+@task_api.route('/task/<id>', methods=["DELETE"])
+def remove(id):
+    Task.query.filter_by(id=id).delete()
+    db.session.commit()
+    return "OK", HTTPStatus.OK
