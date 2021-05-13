@@ -6,8 +6,8 @@ from api.router import home_api, task_api
 def init_app():
     app = Flask(__name__)
     app.app_context().push()
-    app.register_blueprint(home_api, url_prefix='/api')
-    app.register_blueprint(task_api, url_prefix='/api')
+    app.register_blueprint(home_api)
+    app.register_blueprint(task_api)
     db.init_app(app)
     db.create_all()
     return app
