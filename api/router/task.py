@@ -1,8 +1,7 @@
 from flask import Blueprint, request
 from http import HTTPStatus
-import json
 from api.model.task import Task
-from api.model import db
+from database import db
 
 task_api = Blueprint('task', __name__)
 
