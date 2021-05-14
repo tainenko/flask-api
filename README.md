@@ -25,48 +25,7 @@ docker-compose build && docker-compose up
 
 ## Project Structure
 
-.  
-├── Dockerfile  
-├── Pipfile  
-├── README.md  
-├── __init__.py  
-├── api  
-│ ├── __init__.py  
-│ ├── constant.py  
-│ ├── model  
-│ │ ├── __init__.py  
-│ │ └── task.py  
-│ └── router  
-│ ├── __init__.py  
-│ ├── constant.py  
-│ ├── task.py  
-│ └── welcome.py  
-├── config.py  
-├── database.py  
-├── docker-compose.yaml  
-├── main.py  
-├── migration.py  
-├── migrations │ ├── README  
-│ ├── alembic.ini  
-│ ├── env.py  
-│ ├── script.py.mako  
-│ └── versions  
-├── nginx  
-│ ├── Dockerfile  
-│ └── nginx.conf  
-├── requirements.txt  
-├── tests  
-│ ├── __init__.py  
-│ ├── conftest.py  
-│ ├── model  
-│ │ ├── __init__.py  
-│ │ └── test_task.py  
-│ └── router  
-│ ├── __init__.py  
-│ ├── test_task_api.py  
-│ └── test_welcome.py  
-├── wsgi.ini  
-└── wsgi.py
+![Project Structure](project_structure.png)
 
 ## Runtime Environment Requirement
 
