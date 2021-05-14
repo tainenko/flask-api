@@ -14,8 +14,10 @@ services:
   app:
     build: .
     restart: always
-    ports:
-      - "5000:5000"
+    expose:
+      - 5000
+    environment:
+      FLASK_ENV: dev
   nginx:
     build: ./nginx
     volumes:
