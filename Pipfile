@@ -5,12 +5,14 @@ verify_ssl = true
 
 [dev-packages]
 pytest = "*"
+pylint = "*"
 
 [packages]
 flask = "==1.1"
 flask-sqlalchemy = "*"
 flask-migrate = "*"
 flask-script = "*"
+mysqlclient = "*"
 
 [requires]
 python_version = "3.7.3"
