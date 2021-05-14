@@ -1,5 +1,5 @@
 import pytest
-from app import init_app
+from main import init_app
 from database import db
 
 
