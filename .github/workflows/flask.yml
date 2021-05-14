@@ -30,9 +30,5 @@ jobs:
         run: |
           pipenv run pytest -svvv
 
-      - name: Run pylint
-        run: |
-          pipenv run pylint flask-api --ignore=tests
-
 
 
