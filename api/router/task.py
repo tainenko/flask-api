@@ -1,7 +1,8 @@
-from flask import Blueprint, request
+from flask import Blueprint, request, jsonify
 from http import HTTPStatus
 from api.model.task import Task
 from database import db
+from .constant import MIME_CONTENT_JSON
 
 task_api = Blueprint('task', __name__)
 
@@ -10,7 +11,7 @@ task_api = Blueprint('task', __name__)
 def fetch():
     tasks = Task.query.all()
     all_tasks = [{"id": task.id, "name": task.name, "status": task.status} for task in tasks]
-    return {"result": all_tasks}
+    return jsonify({"result": all_tasks})
 
 
 @task_api.route('/task', methods=['POST'])
@@ -20,7 +21,7 @@ def add():
     task = Task(name=name, status=0)
     db.session.add(task)
     db.session.commit()
-    return {"result": {"name": task.name, "status": task.status, "id": task.id}}, HTTPStatus.CREATED
+    return jsonify({"result": {"name": task.name, "status": task.status, "id": task.id}}), HTTPStatus.CREATED
 
 
 @task_api.route('/task/<id>', methods=["PUT"])
@@ -35,11 +36,11 @@ def edit(id):
         task.status = new_status
     if new_name or new_status:
         db.session.commit()
-    return {"result": {"name": task.name, "status": task.status, "id": task.id}}
+    return jsonify({"result": {"name": task.name, "status": task.status, "id": task.id}})
 
 
 @task_api.route('/task/<id>', methods=["DELETE"])
 def remove(id):
     Task.query.filter_by(id=id).delete()
     db.session.commit()
-    return "OK", HTTPStatus.OK
+    return jsonify("OK"), HTTPStatus.OK
