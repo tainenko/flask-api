@@ -2,6 +2,7 @@ from http import HTTPStatus
 import json
 import pytest
 from api.constant import MIMETYPE_JSON
+from api.router.constant import TASK_STATUS_INCOMPLETE, TASK_STATUS_COMPLETE
 from tests.conftest import app, client
 
 headers = {
@@ -10,7 +11,7 @@ headers = {
 }
 
 test_data = {"name": "買晚餐"}
-expected = {"id": 1, "name": "買晚餐", "status": 0}
+expected = {"id": 1, "name": "買晚餐", "status": TASK_STATUS_INCOMPLETE}
 
 
 def test_get_tasks(client):
@@ -41,7 +42,7 @@ def test_query_task_by_id(client):
     url = '/task/1'
     response = client.get(url, headers=headers)
     assert response.content_type == MIMETYPE_JSON
-    assert response.json['result'] == {"name": "買晚餐", "status": 0, "id": 1}
+    assert response.json['result'] == expected
     assert response.status == f"{HTTPStatus.OK} OK"
 
 
