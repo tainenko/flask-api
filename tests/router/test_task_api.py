@@ -1,12 +1,16 @@
-from ..conftest import app, client
 from http import HTTPStatus
 import json
+import pytest
 from api.constant import MIMETYPE_JSON
+from tests.conftest import app, client
 
 headers = {
     'Content-Type': MIMETYPE_JSON,
     'Accept': MIMETYPE_JSON
 }
+
+test_data = {"name": "買晚餐"}
+expected = {"id": 1, "name": "買晚餐", "status": 0}
 
 
 def test_get_tasks(client):
@@ -16,26 +20,43 @@ def test_get_tasks(client):
 
 
 def test_create_task(client):
+    url = '/task'
+    response = client.post(url, data=json.dumps(test_data), headers=headers)
+    assert response.content_type == MIMETYPE_JSON
+    assert response.json['result'] == expected
+    assert response.status == f"{HTTPStatus.CREATED} CREATED"
+
+
+def test_create_task_without_json(client):
     data = {
         "name": "買晚餐"
     }
     url = '/task'
-    response = client.post(url, data=json.dumps(data), headers=headers)
+    response = client.post(url, data=json.dumps(data))
+    assert response.json == {"error message": "invalid request post must use json"}
+    assert response.status == f"{HTTPStatus.UNSUPPORTED_MEDIA_TYPE} UNSUPPORTED MEDIA TYPE"
+
+
+def test_query_task_by_id(client):
+    url = '/task/1'
+    response = client.get(url, headers=headers)
     assert response.content_type == MIMETYPE_JSON
     assert response.json['result'] == {"name": "買晚餐", "status": 0, "id": 1}
-    assert response.status == f"{HTTPStatus.CREATED} CREATED"
+    assert response.status == f"{HTTPStatus.OK} OK"
 
 
-def test_edit_task(client):
+@pytest.mark.parametrize("name", ["買早餐", "買午餐", "買晚餐"])
+@pytest.mark.parametrize("status", [0, 1])
+def test_edit_task(client, name, status):
     id = 1
     data = {
-        "status": 1,
-        "name": "買早餐"
+        "status": status,
+        "name": name
     }
     url = f'/task/{id}'
     response = client.put(url, data=json.dumps(data), headers=headers)
     assert response.content_type == MIMETYPE_JSON
-    expected = {"name": "買早餐", "status": 1, "id": 1}
+    expected = {"name": name, "status": status, "id": 1}
     assert response.json['result'] == expected
     assert response.status == f"{HTTPStatus.OK} OK"
 

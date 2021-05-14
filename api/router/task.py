@@ -26,6 +26,34 @@ def fetch():
     return jsonify({"result": all_tasks})
 
 
+@task_api.route('/task/<id>', methods=['GET'])
+def fetch_one(id):
+    """
+    Query the list of all tasks
+    ---
+    tags:
+      - Task
+    description:
+        Query task by id
+    parameters:
+          - name: id
+            in: path
+            required: true
+            type: integer
+    responses:
+      200:
+          description: The query is successful
+          example: {"result": [{"id": 1, "name": "name", "status": 0}]}
+      404:
+          description: task not found
+    """
+    task = Task.query.filter_by(id=id)
+    if not task.scalar():
+        return jsonify({"error message": f"id {id} task does not exist."}), HTTPStatus.NOT_FOUND
+    task = task.first()
+    return jsonify({"result": {"id": task.id, "name": task.name, "status": task.status}})
+
+
 @task_api.route('/task', methods=['POST'])
 def add():
     """
@@ -56,7 +84,7 @@ def add():
     """
     data = request.get_json()
     if data is None:
-        return jsonify({"error message": "invalid request post must use json"})
+        return jsonify({"error message": "invalid request post must use json"}), HTTPStatus.UNSUPPORTED_MEDIA_TYPE
     if "name" not in data:
         return jsonify({"error message": "Parameter is wrong"}), HTTPStatus.NOT_ACCEPTABLE
     name = data["name"]
@@ -101,7 +129,7 @@ def edit(id):
     """
     data = request.get_json()
     if data is None:
-        return jsonify({"error message": "invalid request post must use json"})
+        return jsonify({"error message": "invalid request post must use json"}), HTTPStatus.UNSUPPORTED_MEDIA_TYPE
     if "name" not in data and "status" not in data:
         return jsonify({"error message": 'Body must have a name or status parameter'}), HTTPStatus.NOT_ACCEPTABLE
     new_name = data.get("name", None)
