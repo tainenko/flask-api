@@ -1,4 +1,6 @@
 from flask import Flask
+from flask_script import Manager
+from flask_migrate import Migrate, MigrateCommand
 from database import db
 from api.router import home_api, task_api
 from config import config_map
@@ -15,6 +17,14 @@ def init_app(env=None):
     return app
 
 
+def init_manager(app, db):
+    migrate = Migrate(app, db)  # Initializing migrate.
+    manager = Manager(app)
+    manager.add_command('db', MigrateCommand)
+    return manager
+
+
 if __name__ == "__main__":
     app = init_app()
-    app.run(host='0.0.0.0', debug=True)
+    manager = init_manager(app, db)
+    manager.run()
