@@ -2,7 +2,6 @@ from flask import Blueprint, request, jsonify
 from http import HTTPStatus
 from api.model.task import Task
 from database import db
-from .constant import MIME_CONTENT_JSON
 
 task_api = Blueprint('task', __name__)
 
@@ -43,4 +42,4 @@ def edit(id):
 def remove(id):
     Task.query.filter_by(id=id).delete()
     db.session.commit()
-    return jsonify("OK"), HTTPStatus.OK
+    return jsonify(""), HTTPStatus.OK
