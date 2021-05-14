@@ -45,6 +45,12 @@ def test_query_task_by_id(client):
     assert response.status == f"{HTTPStatus.OK} OK"
 
 
+def test_query_task_id_unexisted(client):
+    url = '/task/2'
+    response = client.get(url, headers=headers)
+    assert response.status == f"{HTTPStatus.NOT_FOUND} NOT FOUND"
+
+
 @pytest.mark.parametrize("name", ["買早餐", "買午餐", "買晚餐"])
 @pytest.mark.parametrize("status", [0, 1])
 def test_edit_task(client, name, status):
@@ -56,13 +62,13 @@ def test_edit_task(client, name, status):
     url = f'/task/{id}'
     response = client.put(url, data=json.dumps(data), headers=headers)
     assert response.content_type == MIMETYPE_JSON
-    expected = {"name": name, "status": status, "id": 1}
+    expected = {"name": name, "status": status, "id": id}
     assert response.json['result'] == expected
     assert response.status == f"{HTTPStatus.OK} OK"
 
-    response = client.get('/tasks')
+    response = client.get(url)
     assert response.status == f"{HTTPStatus.OK} OK"
-    assert response.get_json() == {"result": [expected]}
+    assert response.get_json() == {"result": expected}
 
 
 def test_delete_task(client):
@@ -72,6 +78,13 @@ def test_delete_task(client):
     assert response.content_type == MIMETYPE_JSON
     assert response.status == f"{HTTPStatus.OK} OK"
 
-    response = client.get('/tasks')
-    assert response.status == f"{HTTPStatus.OK} OK"
-    assert response.get_json() == {"result": []}
+    response = client.get(f'/task/{id}')
+    assert response.status == f"{HTTPStatus.NOT_FOUND} NOT FOUND"
+
+
+def test_delete_not_found_task(client):
+    id = 1
+    url = f'/task/{id}'
+    response = client.delete(url, headers=headers)
+    assert response.content_type == MIMETYPE_JSON
+    assert response.status == f"{HTTPStatus.NOT_FOUND} NOT FOUND"
