@@ -1,5 +1,6 @@
 from flask import Blueprint, request, jsonify
 from http import HTTPStatus
+from .constant import TASK_STATUS_INCOMPLETE
 from api.model.task import Task
 from database import db
 
@@ -17,7 +18,7 @@ def fetch():
 def add():
     data = request.get_json()
     name = data["name"]
-    task = Task(name=name, status=0)
+    task = Task(name=name, status=TASK_STATUS_INCOMPLETE)
     db.session.add(task)
     db.session.commit()
     return jsonify({"result": {"name": task.name, "status": task.status, "id": task.id}}), HTTPStatus.CREATED
