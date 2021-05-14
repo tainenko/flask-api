@@ -5,8 +5,6 @@ verify_ssl = true
 
 [dev-packages]
 pytest = "*"
-pylint = "*"
-pylint-flask = "*"
 
 [packages]
 flask = "==1.1"
