@@ -118,7 +118,7 @@ def edit(id):
               type: string
               description: task name
             status:
-              type: integer
+              type: boolean
               description: task status
     responses:
       200:
