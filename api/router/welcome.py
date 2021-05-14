@@ -1,8 +1,8 @@
 from flask import Blueprint
 
-home_api = Blueprint('welcome', __name__)
+home_api = Blueprint('home', __name__)
 
 
 @home_api.route('/')
 def welcome():
-    return "Hello World!"
+    return "Welcome to flask api!"
